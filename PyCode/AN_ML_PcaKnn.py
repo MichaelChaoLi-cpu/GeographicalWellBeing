@@ -7,8 +7,9 @@ Created on Sun Sep 24 10:59:52 2023
 
 import numpy as np
 import pandas as pd
-from sklearn.decomposition import PCA
+from sklearn.cluster import DBSCAN
 from sklearn.cluster import KMeans
+from sklearn.decomposition import PCA
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
@@ -113,7 +114,6 @@ accuracy = accuracy_score(y_test, y_pred)
 print('Accuracy:', accuracy)
 # Accuracy: 0.9024552090245521
 
-
 #### KMeans 
 data = data_sweden[used_columns]
 scaler = StandardScaler()
@@ -123,5 +123,18 @@ kmeans.fit(data_scaled)
 clusters = kmeans.labels_
 data_sweden['Flourish_Value_Binary_kmeans'] = clusters
 data_sweden['Flourish_Value_Binary_kmeans'].describe()
+
+#### KNN test
+X = data_sweden[used_columns]
+y = data_sweden['Flourish_Value_Binary_kmeans']
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1,
+                                                    random_state=42)
+knn = KNeighborsClassifier(n_neighbors=2)  
+knn.fit(X_train, y_train)
+y_pred = knn.predict(X_test)
+accuracy = accuracy_score(y_test, y_pred)
+print('Accuracy:', accuracy)
+# Accuracy: 0.9283344392833444
+
 
 data_sweden.to_csv('../Data/gfs_sweden_w1_perturbed_sample_Classified.csv')
