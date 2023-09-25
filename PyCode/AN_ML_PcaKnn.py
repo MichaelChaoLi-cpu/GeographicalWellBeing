@@ -100,7 +100,9 @@ print(f"Information Retained: {information_retained * 100:.2f}%")
 
 Flourish_Value_median = data_sweden['Flourish_Value'].median()
 data_sweden['Flourish_Value_Binary'] = (data_sweden['Flourish_Value'] >= Flourish_Value_median).astype(int)
-
+##### ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+##### This method is retired:
+#####   this method is investigate who get most variation.    
 
 #### KNN test
 X = data_sweden[used_columns]
@@ -138,3 +140,19 @@ print('Accuracy:', accuracy)
 
 
 data_sweden.to_csv('../Data/gfs_sweden_w1_perturbed_sample_Classified.csv')
+
+col_of_interest = used_columns + ['Flourish_Value_Binary_kmeans']
+filtered_df = data_sweden.loc[data_sweden['Flourish_Value_Binary_kmeans'] == 1, col_of_interest]
+description = filtered_df.describe()
+print(description)
+
+filtered_df = data_sweden.loc[data_sweden['Flourish_Value_Binary_kmeans'] == 0, col_of_interest]
+description_neg = filtered_df.describe()
+print(description_neg)
+
+description.loc['mean',:] - description_neg.loc['mean',:]
+
+
+
+
+
